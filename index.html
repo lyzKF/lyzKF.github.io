@@ -329,13 +329,13 @@
           
             <p><font size="12"><a href="https://arxiv.org/abs/1409.3215" title="seq2seq" target="_blank" rel="noopener">Sequence to sequence learning with Neural Networks</a></font><br></p>
 <h2 id="Theory"><a href="#Theory" class="headerlink" title="Theory"></a>Theory</h2><p>此论文提出了一种端到端的序列学习方法，其利用多层LSTM把输入序列映射到一个固定维度的向量中，然后用另外一个多层LSTM网络对编码向量解码得到目标序列。</p>
-<center><img src="../img/seq2seq.jpg" alt="Alt text" title="basic seq2seq"></center>
+<center><img src="https://github.com/lyzKF/lyzKF.github.io/img/seq2seq.jpg" alt="Alt text" title="basic seq2seq"></center>
 
 <h2 id="The-model"><a href="#The-model" class="headerlink" title="The model"></a>The model</h2><h3 id="RNN"><a href="#RNN" class="headerlink" title="RNN"></a>RNN</h3><p>输入序列：$(x_1, x_2, x_3, …, x_T)$，输出序列：$(y_1, y_2, y_3,…, y_T)$，标准RNN通过迭代公式(1)来计算序列的隐层状态：<br>\begin{equation}<br>    h_t = sigmoid(W^{hx} x_t + W^{hh} h_{t - 1})<br>\end{equation}<br>$t$时刻输出序列的预测如下：<br>$$y_{t} = W^{yh}h_{t}$$<br>其中，$h_{t}$是$t$时刻的隐层状态，$W^{hx},W^{hh},W^{yh}$分别是相应的权重矩阵, $t$时刻的RNN如下图：</p>
-<center><img src="../img/RNN.png" alt="Alt text" title="rnn"></center>
+<center><img src="https://github.com/lyzKF/lyzKF.github.io/img/RNN.png" alt="Alt text" title="rnn"></center>
 
 <h3 id="seq2seq"><a href="#seq2seq" class="headerlink" title="seq2seq"></a>seq2seq</h3><p>最基础的seq2seq模型包含三个部分，即编码器、解码器、中间状态变量。编码器通过多层LSTM将输入序列映射到固定维度的向量中，解码器通过多层LSTM对编码向量进行解码得到目标序列。 假设输入序列：$(x_1, x_2, x_3, …, x_m)$，输出序列：$(y_1, y_2, y_3,…, y_n)$，编码端隐层状态：$(s_{1}^{i},s_{2}^{i},…, s_{m}^{i})$，解码端隐层状态：$(h_{1}^{j}, h_{2}^{j},…,h_{n}^{j})$。编码端、解码端都采用了多层的LSTM，编码端隐层状态计算如下：<br>$$s_{t}^{i} = g(s_{t}^{i-1},s_{t-1}^{i} )$$<br>其中，$s_{t}^{i}$是$i^{th}$层$t$时刻的隐层状态，$s_{t}^{0} = x_{t}$，$g$是激活函数。对于解码端，其起始位置用特殊字符<code>&lt;EOS&gt;</code>做标识：<br>$$h_{t}^{i} = g(y_{t}^{i}, y_{t-1}^{4},h_{t-1}^{i} ) \qquad i = 1 $$<br>$$h_{t}^{i} = g(h_{t}^{i-1},h_{t-1}^{i} ) \qquad 1 &lt; i &lt; 4 $$<br>$$y_{t}^{4} = softmax(h_{t}^{4}) \qquad i = 4 $$</p>
-<p><center><img src="../img/multi-lstm-seq2seq.png" alt="Alt text"></center><br>此图来源于<a href="https://www.youtube.com/watch?v=OQQ-W_63UgQ&amp;index=1&amp;list=PL3FW7Lu3i5Jsnh1rnUwq_TcylNr7EkRe6" target="_blank" rel="noopener"> cs224n Lecture1</a>，原文中并没有给出多层LSTM的公式，上述公式是根据此图推得。 目标语句的条件概率如下：<br>$$p(y_1, y_2, …, y_{n} | x_1, x_2, …, x_m) = \prod_{t =1}^{n}{p(y_t | v, y_1, y_2, ..y_{t-1})}$$<br>其中$v$是编码向量。</p>
+<p><center><img src="https://github.com/lyzKF/lyzKF.github.io/img/multi-lstm-seq2seq.png" alt="Alt text"></center><br>此图来源于<a href="https://www.youtube.com/watch?v=OQQ-W_63UgQ&amp;index=1&amp;list=PL3FW7Lu3i5Jsnh1rnUwq_TcylNr7EkRe6" target="_blank" rel="noopener"> cs224n Lecture1</a>，原文中并没有给出多层LSTM的公式，上述公式是根据此图推得。 目标语句的条件概率如下：<br>$$p(y_1, y_2, …, y_{n} | x_1, x_2, …, x_m) = \prod_{t =1}^{n}{p(y_t | v, y_1, y_2, ..y_{t-1})}$$<br>其中$v$是编码向量。</p>
 <h3 id="贡献"><a href="#贡献" class="headerlink" title="贡献"></a>贡献</h3><blockquote>
 <p>使用了两个不同的多层LSTM，一个用于处理输入序列，一个用于处理输出序列;</p>
 <p>深层的LSTM性能优于浅层的LSTM;</p>
