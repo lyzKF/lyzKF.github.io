@@ -72,7 +72,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="NMT,">
 
 
 
@@ -83,16 +83,22 @@
 
 
 
-<meta name="description" content="komorebi">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="Sequence to sequence learning with Neural Networks Theory此论文提出了一种端到端的序列学习方法，其利用多层LSTM把输入序列映射到一个固定维度的向量中，然后用另外一个多层LSTM网络对编码向量解码得到目标序列。   The modelRNN输入序列：$(x_1, x_2, x_3, …, x_T)$，输出序列：$(y_1, y_2, y_3,">
+<meta name="keywords" content="NMT">
+<meta property="og:type" content="article">
+<meta property="og:title" content="seq2seq">
+<meta property="og:url" content="http://yoursite.com/2019/05/29/seq2seq/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="komorebi">
+<meta property="og:description" content="Sequence to sequence learning with Neural Networks Theory此论文提出了一种端到端的序列学习方法，其利用多层LSTM把输入序列映射到一个固定维度的向量中，然后用另外一个多层LSTM网络对编码向量解码得到目标序列。   The modelRNN输入序列：$(x_1, x_2, x_3, …, x_T)$，输出序列：$(y_1, y_2, y_3,">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/2019/05/29/img/seq2seq.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/29/img/RNN.png">
+<meta property="og:image" content="http://yoursite.com/2019/05/29/img/multi-lstm-seq2seq.png">
+<meta property="og:updated_time" content="2019-05-29T09:58:41.258Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
-<meta name="twitter:description" content="komorebi">
+<meta name="twitter:title" content="seq2seq">
+<meta name="twitter:description" content="Sequence to sequence learning with Neural Networks Theory此论文提出了一种端到端的序列学习方法，其利用多层LSTM把输入序列映射到一个固定维度的向量中，然后用另外一个多层LSTM网络对编码向量解码得到目标序列。   The modelRNN输入序列：$(x_1, x_2, x_3, …, x_T)$，输出序列：$(y_1, y_2, y_3,">
+<meta name="twitter:image" content="http://yoursite.com/2019/05/29/img/seq2seq.jpg">
 
 
 
@@ -122,13 +128,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/">
+  <link rel="canonical" href="http://yoursite.com/2019/05/29/seq2seq/">
 
 
 
 
 
-  <title>Hexo</title>
+  <title>seq2seq | Hexo</title>
   
 
 
@@ -147,8 +153,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -241,9 +246,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -273,9 +278,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/29/seq2seq/" itemprop="url">seq2seq</a></h1>
+          <h1 class="post-title" itemprop="name headline">seq2seq</h1>
         
 
         <div class="post-meta">
@@ -325,9 +328,7 @@
       
 
       
-        
-          
-            <p><font size="12"><a href="https://arxiv.org/abs/1409.3215" title="seq2seq" target="_blank" rel="noopener">Sequence to sequence learning with Neural Networks</a></font><br></p>
+        <p><font size="12"><a href="https://arxiv.org/abs/1409.3215" title="seq2seq" target="_blank" rel="noopener">Sequence to sequence learning with Neural Networks</a></font><br></p>
 <h2 id="Theory"><a href="#Theory" class="headerlink" title="Theory"></a>Theory</h2><p>此论文提出了一种端到端的序列学习方法，其利用多层LSTM把输入序列映射到一个固定维度的向量中，然后用另外一个多层LSTM网络对编码向量解码得到目标序列。</p>
 <center><img src="../img/seq2seq.jpg" alt="Alt text" title="basic seq2seq"></center>
 
@@ -347,8 +348,6 @@
 <p>编码器与解码器的链接仅仅依靠一个固定大小的状态向量，使得解码器无法关注输入信息更多的细节；</p>
 </blockquote>
 
-          
-        
       
     </div>
     
@@ -363,135 +362,36 @@
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/29/test/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="lyz">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/29/test/" itemprop="url">test</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-29T11:47:51+08:00">
-                2019-05-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-
+            <a href="/tags/NMT/" rel="tag"># NMT</a>
           
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body han-init-context" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>#komorebi</p>
-<p><em>this is a demo</em><br><strong>this is a blog for neural machine translation</strong></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
       
 
       
       
-        <div class="post-eof"></div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/29/test/" rel="next" title="test">
+                <i class="fa fa-chevron-left"></i> test
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
       
     </footer>
   </div>
@@ -501,10 +401,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -512,6 +413,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -532,8 +437,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -584,6 +498,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Theory"><span class="nav-number">1.</span> <span class="nav-text">Theory</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-model"><span class="nav-number">2.</span> <span class="nav-text">The model</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RNN"><span class="nav-number">2.1.</span> <span class="nav-text">RNN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#seq2seq"><span class="nav-number">2.2.</span> <span class="nav-text">seq2seq</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#贡献"><span class="nav-number">2.3.</span> <span class="nav-text">贡献</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不足"><span class="nav-number">2.4.</span> <span class="nav-text">不足</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -717,6 +647,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
