@@ -83,21 +83,21 @@
 
 
 
-<meta name="description" content="Neural Machine Translation by iointly Learning to Align and Translate Introduction现有的神经网络翻译模型大多数是基于encoder-decoder框架的，其利用encoder将输入序列编码到一个固定长度的向量中，decoder依据此编码向量生成输出序列。传统的encoder-decoder框架中固定长度的编码向量是提">
+<meta name="description" content="Neural Machine Translation by jointly Learning to Align and Translate Introduction现有的神经网络翻译模型大多数是基于encoder-decoder框架的，其利用encoder将输入序列编码到一个固定长度的向量中，decoder依据此编码向量生成输出序列。传统的encoder-decoder框架中固定长度的编码向量是提">
 <meta name="keywords" content="NMT">
 <meta property="og:type" content="article">
 <meta property="og:title" content="vanilla_attention.md">
 <meta property="og:url" content="http://yoursite.com/2019/06/03/vanilla-attention-md/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Neural Machine Translation by iointly Learning to Align and Translate Introduction现有的神经网络翻译模型大多数是基于encoder-decoder框架的，其利用encoder将输入序列编码到一个固定长度的向量中，decoder依据此编码向量生成输出序列。传统的encoder-decoder框架中固定长度的编码向量是提">
+<meta property="og:description" content="Neural Machine Translation by jointly Learning to Align and Translate Introduction现有的神经网络翻译模型大多数是基于encoder-decoder框架的，其利用encoder将输入序列编码到一个固定长度的向量中，decoder依据此编码向量生成输出序列。传统的encoder-decoder框架中固定长度的编码向量是提">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://www.komorebi.yoga/img/seq2seq-encoder.png">
 <meta property="og:image" content="https://www.komorebi.yoga/img/seq2seq-decoder.png">
-<meta property="og:image" content="https://www.komorebi.yoga/img/seq2seq-attention.png">
-<meta property="og:updated_time" content="2019-06-04T09:25:19.069Z">
+<meta property="og:image" content="https://www.komorebi.yoga/img/seq2seq-atten.png">
+<meta property="og:updated_time" content="2019-06-04T09:29:06.951Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="vanilla_attention.md">
-<meta name="twitter:description" content="Neural Machine Translation by iointly Learning to Align and Translate Introduction现有的神经网络翻译模型大多数是基于encoder-decoder框架的，其利用encoder将输入序列编码到一个固定长度的向量中，decoder依据此编码向量生成输出序列。传统的encoder-decoder框架中固定长度的编码向量是提">
+<meta name="twitter:description" content="Neural Machine Translation by jointly Learning to Align and Translate Introduction现有的神经网络翻译模型大多数是基于encoder-decoder框架的，其利用encoder将输入序列编码到一个固定长度的向量中，decoder依据此编码向量生成输出序列。传统的encoder-decoder框架中固定长度的编码向量是提">
 <meta name="twitter:image" content="https://www.komorebi.yoga/img/seq2seq-encoder.png">
 
 
@@ -328,11 +328,11 @@
       
 
       
-        <p><font size="6"><a href="https://arxiv.org/pdf/1409.0473.pdf" title="seq2seq attention" target="_blank" rel="noopener">Neural Machine Translation by iointly Learning to Align and Translate</a></font><br></p>
+        <p><font size="6"><a href="https://arxiv.org/pdf/1409.0473.pdf" title="seq2seq attention" target="_blank" rel="noopener">Neural Machine Translation by jointly Learning to Align and Translate</a></font><br></p>
 <h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>现有的神经网络翻译模型大多数是基于encoder-decoder框架的，其利用encoder将输入序列编码到一个固定长度的向量中，decoder依据此编码向量生成输出序列。传统的encoder-decoder框架中固定长度的编码向量是提升seq2seq模型性能的瓶颈，本文作者首次将注意力机制引入到了NLP领域。</p>
 <h2 id="The-Model"><a href="#The-Model" class="headerlink" title="The Model"></a>The Model</h2><h3 id="RNN-Encoder-Decoder"><a href="#RNN-Encoder-Decoder" class="headerlink" title="RNN Encoder-Decoder"></a>RNN Encoder-Decoder</h3><p><center><img src="https://www.komorebi.yoga/img/seq2seq-encoder.png" alt="Alt text" title="encoder"></center><br>在编码端，编码器将给定的输入序列$X = X_{1},x_{2},…,x_{T_{x}}$编码得到context vector$c$中，具体公式如下:<br>$$h_{t}=f(x_{t},h_{t-1})$$<br>$$c = q({h_{1},h_{2},…,h_{T_{x}}})$$<br>其中，$h_{t}\in R^{n}$是t时刻的隐层状态，$f,q$是非线性方程。大多数情况下，我们会设置$f$为bi-lstm，$c = h_{t_{x}}$。<br></p>
 <p><center><img src="https://www.komorebi.yoga/img/seq2seq-decoder.png" alt="Alt text" title="encoder"></center><br>在解码端，首先我们需要计算$i$时刻的隐层状态，其依赖于当前时刻的输入$x_{i}$与上一时刻的隐层状态$s_{i-1}$。<br>$$s_{i} = f(x_{i},s_{i-1})$$<br>然后依据$i$时刻的隐层状态、上一时刻的输出$y_{i-1}$以及context vector$c$来预测当前时刻的输出。$$p(y_{i}) = p(y_{i}|y_{1},y_{2},…,y_{i-1}, c) = g(y_{i-1},s_{i},c)$$<br>整个输出序列$Y$的概率，计算如下：<br>$$p(Y) = \prod_{i=1}^{T}{p(y_{i}|y_{1},y_{2},…,y_{i-1}, c)}$$</p>
-<h3 id="Learning-to-align-and-translate"><a href="#Learning-to-align-and-translate" class="headerlink" title="Learning to align and translate"></a>Learning to align and translate</h3><p><center><img src="https://www.komorebi.yoga/img/seq2seq-attention.png" alt="Alt text" title="encoder"></center><br>在Seq2seq-Attention模型结构中，我们重新定了$i$时刻的解码端的隐层状态$s_{i}$以及该时刻输出值的条件概率：<br>$$s_{i} = f(y_{i},s_{i-1},c_{i})$$<br>$$p(y_{i}) = p(y_{i}|y_{1},y_{2},…,y_{i-1}, c) = g(y_{i-1},s_{i},c_{i})$$<br>对于$c_{i}$的计算如下：<br>$$e_{it} = align(s_{i-1}, h_{t})$$<br>$$a_{it} = \frac{exp(e_{it})}{\sum_{k=1}^{T_{x}}{exp(e_{ik})}}$$<br>$$c_{i} = \sum_{t=1}^{T_{x}}{a_{it}h_{t}}$$<br>其中，文本对齐函数align被定义为一个FFN，但其常见的定义也包括：dot、concat、general，具体公式如下：<br>$$\begin{equation} align(s_{i-1},h_{t}) =<br>\left{<br>             \begin{array}{lr}<br>             {s_{i-1}}^T h_{t} \qquad dot\<br>             {s_{i-1}}^T W_a h_{t} \qquad dot general \<br>             W_a [s_{i-1}; h_{t}]) \qquad concat &amp;<br>             \end{array}<br>\right.<br>\end{equation}$$</p>
+<h3 id="Learning-to-align-and-translate"><a href="#Learning-to-align-and-translate" class="headerlink" title="Learning to align and translate"></a>Learning to align and translate</h3><p><center><img src="https://www.komorebi.yoga/img/seq2seq-atten.png" alt="Alt text" title="encoder"></center><br>在Seq2seq-Attention模型结构中，我们重新定了$i$时刻的解码端的隐层状态$s_{i}$以及该时刻输出值的条件概率：<br>$$s_{i} = f(y_{i},s_{i-1},c_{i})$$<br>$$p(y_{i}) = p(y_{i}|y_{1},y_{2},…,y_{i-1}, c) = g(y_{i-1},s_{i},c_{i})$$<br>对于$c_{i}$的计算如下：<br>$$e_{it} = align(s_{i-1}, h_{t})$$<br>$$a_{it} = \frac{exp(e_{it})}{\sum_{k=1}^{T_{x}}{exp(e_{ik})}}$$<br>$$c_{i} = \sum_{t=1}^{T_{x}}{a_{it}h_{t}}$$<br>其中，文本对齐函数align被定义为一个FFN，但其常见的定义也包括：dot、concat、general，具体公式如下：<br>$$\begin{equation} align(s_{i-1},h_{t}) =<br>\left{<br>             \begin{array}{lr}<br>             {s_{i-1}}^T h_{t} \qquad dot\<br>             {s_{i-1}}^T W_a h_{t} \qquad dot general \<br>             W_a [s_{i-1}; h_{t}]) \qquad concat &amp;<br>             \end{array}<br>\right.<br>\end{equation}$$</p>
 <h3 id="贡献"><a href="#贡献" class="headerlink" title="贡献"></a>贡献</h3><blockquote>
 <p>首次将注意力机制引入NLP任务中;</p>
 <p>seq2seq with attention在机器翻译任务中表现优异;</p>
