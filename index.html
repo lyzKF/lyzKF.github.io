@@ -256,6 +256,138 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/03/vanilla-attention/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lyz">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/06/03/vanilla-attention/" itemprop="url">vanilla_attention</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-03T18:29:45+08:00">
+                2019-06-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><font size="6"><a href="https://arxiv.org/pdf/1409.0473.pdf" title="seq2seq attention" target="_blank" rel="noopener">Neural Machine Translation by jointly Learning to Align and Translate</a></font><br></p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>现有的神经网络翻译模型大多数是基于encoder-decoder框架的，其利用encoder将输入序列编码到一个固定长度的向量中，decoder依据此编码向量生成输出序列。传统的encoder-decoder框架中固定长度的编码向量是提升seq2seq模型性能的瓶颈，本文作者首次将注意力机制引入到了NLP领域。</p>
+<h2 id="The-Model"><a href="#The-Model" class="headerlink" title="The Model"></a>The Model</h2><h3 id="RNN-Encoder-Decoder"><a href="#RNN-Encoder-Decoder" class="headerlink" title="RNN Encoder-Decoder"></a>RNN Encoder-Decoder</h3><p><center><img src="https://www.komorebi.yoga/img/seq2seq-encoder.png" alt="Alt text" title="encoder"></center><br>在编码端，编码器将给定的输入序列$X = X_{1},x_{2},…,x_{T_{x}}$编码得到context vector$c$中，具体公式如下:<br>$$h_{t}=f(x_{t},h_{t-1})$$<br>$$c = q({h_{1},h_{2},…,h_{T_{x}}})$$<br>其中，$h_{t}\in R^{n}$是t时刻的隐层状态，$f,q$是非线性方程。大多数情况下，我们会设置$f$为bi-lstm，$c = h_{t_{x}}$。<br></p>
+<p><center><img src="https://www.komorebi.yoga/img/seq2seq-decoder.png" alt="Alt text" title="encoder"></center><br>在解码端，首先我们需要计算$i$时刻的隐层状态，其依赖于当前时刻的输入$x_{i}$与上一时刻的隐层状态$s_{i-1}$。<br>$$s_{i} = f(x_{i},s_{i-1})$$<br>然后依据$i$时刻的隐层状态、上一时刻的输出$y_{i-1}$以及context vector$c$来预测当前时刻的输出。$$p(y_{i}) = p(y_{i}|y_{1},y_{2},…,y_{i-1}, c) = g(y_{i-1},s_{i},c)$$<br>整个输出序列$Y$的概率，计算如下：<br>$$p(Y) = \prod_{i=1}^{T}{p(y_{i}|y_{1},y_{2},…,y_{i-1}, c)}$$</p>
+<h3 id="Learning-to-align-and-translate"><a href="#Learning-to-align-and-translate" class="headerlink" title="Learning to align and translate"></a>Learning to align and translate</h3><p><center><img src="https://www.komorebi.yoga/img/seq2seq-atten.png" alt="Alt text" title="attention"></center><br>在Seq2seq-Attention模型结构中，我们重新定了$i$时刻的解码端的隐层状态$s_{i}$以及该时刻输出值的条件概率：<br>$$s_{i} = f(y_{i},s_{i-1},c_{i})$$<br>$$p(y_{i}) = p(y_{i}|y_{1},y_{2},…,y_{i-1}, c) = g(y_{i-1},s_{i},c_{i})$$<br>对于$c_{i}$的计算如下：<br>$$e_{it} = align(s_{i-1}, h_{t})$$<br>$$a_{it} = \frac{exp(e_{it})}{\sum_{k=1}^{T_{x}}{exp(e_{ik})}}$$<br>$$c_{i} = \sum_{t=1}^{T_{x}}{a_{it}h_{t}}$$<br>其中，文本对齐函数align被定义为一个FFN，但其常见的定义也包括：dot、concat、general，具体公式如下：<br>$$align(s_{i-1},h_{t}) = {s_{i-1}}^T h_{t} \qquad dot \ {s_{i-1}}^T W_a h_{t} \qquad dot general \ W_a [s_{i-1}; h_{t}]) \qquad concat$$</p>
+<h3 id="贡献"><a href="#贡献" class="headerlink" title="贡献"></a>贡献</h3><blockquote>
+<p>首次将注意力机制引入NLP任务中;</p>
+<p>seq2seq with attention在机器翻译任务中表现优异;</p>
+</blockquote>
+<h3 id="不足"><a href="#不足" class="headerlink" title="不足"></a>不足</h3><blockquote>
+<p>seq2seq with attention的编码端、解码端仍然采用了RNN(lstm、bi-lstm)，无法并行，速度受限；</p>
+<p>编码器与解码器的链接仅仅依靠一个固定大小的状态向量，使得解码器无法关注输入信息更多的细节；</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/29/seq2seq/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -427,7 +559,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
