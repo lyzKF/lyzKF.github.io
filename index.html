@@ -86,7 +86,7 @@
 <meta name="description" content="komorebi">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:url" content="http://komorebi.yoga/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="komorebi">
 <meta property="og:locale" content="default">
@@ -122,7 +122,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/">
+  <link rel="canonical" href="http://komorebi.yoga/">
 
 
 
@@ -256,7 +256,139 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/06/docker-flask/">
+    <link itemprop="mainEntityOfPage" href="http://komorebi.yoga/2019/08/16/layer-wise-coordination-md/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lyz">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/16/layer-wise-coordination-md/" itemprop="url">layer_wise_coordination</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-16T10:06:54+08:00">
+                2019-08-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><font size="4"><a href="https://papers.nips.cc/paper/8019-layer-wise-coordination-between-encoder-and-decoder-for-neural-machine-translation" title="layer-wise coordination" target="_blank" rel="noopener">Layer-Wise Coordination between Encoder and Decoder for Neural Machine Translation</a></font><br></p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>本文提出了神经机器翻译分层协调(layer-wise coordiantion)的概念，其逐层协调encoder、decoder每层隐层表征的学习。具体来说，本文设计了layer-wise attention和mixed attention机制，同时共享了encoder、decoder每层的参数权重。</p>
+<h2 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h2><p>目前最佳的神经机器翻译(Transformer)采用了一种端到端的结构，其由encoder与decoder两部分组成。其中，encoder、deocder都是stack of N layers的结构，decoder利用encoder的最后一层输出做为输入来生成各个目标位置的隐层表征。<br>对于此，本文作者有如下疑惑：</p>
+<blockquote>
+<p>Why should the low-level representation of a target token base on the highest-level ones of the source token?<br>Why not attenting each layer of the decoder to each responding layer of the encoder?</p>
+</blockquote>
+<h2 id="The-Model"><a href="#The-Model" class="headerlink" title="The Model"></a>The Model</h2><h3 id="Layer-wise-coordination"><a href="#Layer-wise-coordination" class="headerlink" title="Layer-wise coordination"></a>Layer-wise coordination</h3><p><center><img src="https://www.komorebi.yoga/img/layer-wise-coordination.png" alt="Alt text" title="encoder"></center><br>Layer-wise coordination对Transformer结构做了两方面的修改，即decoder中的每层需要attends to encoder中相对应的每一层、attention以及FFN层参数权重的共享。该模型的encoder、decoder拥有相同的层数，encoder中$i$层source token的隐层表征基于self-attention处理$(i-1)$层所有的source tokens而获得。公式如下：<br>$$S_{t}^{i} = self-attn(s_{1}^{i-1}, s_{2}^{i-1}, …, s_{T}^{i-1})$$<br>其中，$S$表示source token的隐层表征，$T$表示source sequence的长度，$i$表示模型的$i-th$层。<br>该模型的decoder利用一种mixed attention机制来处理$i$层所有source tokens的隐层表征以及$(i-1)$层前$t$个target tokens的隐层表征。公式如下：<br>$$H_{t}^{i} = mixed-attn(s_{1}^{i-1}, s_{2}^{i-1}, …, s_{T}^{i-1}, H_{1}^{i-1}, …, H_{t-1}^{i-1})$$<br>其中，$H$表示target token的隐层表征。</p>
+<h3 id="Mixed-attention"><a href="#Mixed-attention" class="headerlink" title="Mixed  attention"></a>Mixed  attention</h3><p>mixed attention的实现比较简单，它只是在原始dot-product attention中增加了mask信息，来防止模型attending到非法的位置。具体公式如下：<br>$$Mixed_attention(Q,K,V) = softmax(\frac{QK^{T}}{\sqrt{d_{model}}} + M) V$$<br>$$M(i,j)=<br>\begin{cases}<br>0&amp; \text{j &lt; n V j =&lt; i+n}\<br>-infty&amp; \text{otherwise}<br>\end{cases}$$</p>
+<h3 id="贡献"><a href="#贡献" class="headerlink" title="贡献"></a>贡献</h3><blockquote>
+<p>提出了layer-wise coordination的概念，实现了mixed attention;</p>
+<p>共享每层参数权重，可以保证encoder、decoder堆叠更多的层，模型变瘦、拉长;</p>
+</blockquote>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p><a href="https://papers.nips.cc/paper/8019-layer-wise-coordination-between-encoder-and-decoder-for-neural-machine-translation" title=" " target="_blank" rel="noopener">暂不共享</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://komorebi.yoga/2019/06/06/docker-flask/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="lyz">
@@ -388,7 +520,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/03/vanilla-attention/">
+    <link itemprop="mainEntityOfPage" href="http://komorebi.yoga/2019/06/03/vanilla-attention/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="lyz">
@@ -520,7 +652,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/29/seq2seq/">
+    <link itemprop="mainEntityOfPage" href="http://komorebi.yoga/2019/05/29/seq2seq/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="lyz">
@@ -691,7 +823,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
